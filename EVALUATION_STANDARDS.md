@@ -59,7 +59,9 @@ These guidelines apply to the design and implementation of any LLM evaluation, i
             *   role-based access (ideally with dynamically generated credentials).
             *   locally deployed sub-models.
             *   custom tools.
-        *   Open question: how should we protect against abuse of inference APIs other than resource consumption, e.g. triggering safety
+        *   Protect against abuse of inference APIs:
+            *  use a read-only API key.
+            *  set a budget limit (i.e. if there's a risk of a model abusing the API, create a new OpenAI project for that eval specifically and set budget alerts and limits).
     *   **Secrets:** Ensure secrets are not committed to code repos, available to agents, or available to AI code tools such as Copilot or Cursor.
         *   Secrets files (\`.env\` or similar) should be added to `.gitignore` .
         *   A secret scanner (e.g. [Github Secret Scanner](https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning)) should not find any secrets in the codebase.
@@ -193,7 +195,10 @@ These guidelines focus on leveraging Inspect’s features to implement evaluatio
     
 *   **Statistical Rigor**
     
-    *   TODO
+    *   Naive vs clustered mean: Your dataset might be skewed towards certain question types/tasks. Cluster standard errors on the unit of randomization (for example, passage of text).
+    *   Epochs: Use Inspect's built-in epoch parameter to resample answers from the same model several times and use the question-level averages as the question scores.
+    *   On top of average scores, report the standard error of the mean.
+    *   See more information [here](https://www.anthropic.com/research/statistical-approach-to-model-evals).
     
 *   **Robust Dataset Management**
     
