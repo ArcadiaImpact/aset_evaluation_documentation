@@ -51,7 +51,7 @@ Reasons why you may not be able to leverage the basic agent include (though thes
 
 ### The submission logic on the basic agent requires the agent to submit an answer, but this doesn't make sense for my evaluation.
 
-_(For richer context) The basic agent submission functionality is designed to accept an "answer" from an agent which is evaluated for correctness. When the agent calls_ _`submit`__, the agent is scored using the task's configured_ _`scorer`__. A score of 1.0 (or a value that converts to 1.0 via the_ _`score_value`_ _function) indicates success, ending the agent loop. Otherwise, the agent receives an "incorrect" message prompting it to try again._
+_(For richer context) The basic agent submission functionality is designed to accept an "answer" from an agent which is evaluated for correctness. When the agent calls `submit`, the agent is scored using the task's configured `scorer`. A score of 1.0 (or a value that converts to 1.0 via the `score_value` function) indicates success, ending the agent loop. Otherwise, the agent receives an "incorrect" message prompting it to try again._
 
 This submission logic can be confusing when your task doesn't involve finding a specific answer, but rather evaluating the agent's process or output (e.g. code changes, design proposals, etc). While this submit-and-score flow is hardcoded into the basic agent, you can adapt it via:
 
