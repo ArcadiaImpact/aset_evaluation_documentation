@@ -190,7 +190,7 @@ def scorer():
 For displaying metrics when you only have one `Sample`, you should calculate any metrics inside the `scorer` and then retrieve the metrics inside `@metric` decorated functions in one of two ways:
 
 1. Via the `score.value`. A `score.value` can be a dictionary, which means you can set a key/value pair for each of your metric values and retrieve them in the `@metric` function.
-2. Via the `score.metadata`. Create a key/value pair for each of your metric values in the score metadata. _This method is preferred if there is a single value that would make sense for your_ _`score.value`__, since other parts of Inspect work best when a score has a single value._
+2. Via the `score.metadata`. Create a key/value pair for each of your metric values in the score metadata. _This method is preferred if there is a single value that would make sense for your `score.value`, since other parts of Inspect work best when a score has a single value._
 
 ```python
 @metric
