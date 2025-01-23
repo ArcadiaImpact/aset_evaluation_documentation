@@ -39,7 +39,40 @@ There are a few tricks/hacks when it comes to using the basic agent that may be 
 
 *   The basic agent [documentation](https://inspect.ai-safety-institute.org.uk/agents.html#sec-basic-agent).
 *   The `basic_agent()` code [implementation](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/solver/_basic_agent.py).
-*   The basic agent [flow chart](https://sharing.clickup.com/9011772876/wb/h/8cj9fec-10791/db9aa0776345344).
+*   The basic agent flow chart (see mermaid diagram below)
+
+```mermaid
+flowchart TD
+    Start["Initialize system message, available resources, token limits, and max attempts"] --> Generate
+
+    subgraph Basic Agent Loop
+        Generate["Generate"]
+        Generate --> ModelTool
+        ModelTool{"Has the model called a tool?"}
+        
+        ModelTool -->|Yes| SubmitTool{"Was the submit tool called?"}
+        ModelTool -->|No| AppendContinue["Append continue ChatMessage to TaskState messages"]
+        AppendContinue --> LimitReached{"Has a limit been reached?"}
+        
+        SubmitTool -->|Yes| MaxAttempts{"Has max attempts been reached?"}
+        SubmitTool -->|No| LimitReached
+        
+        MaxAttempts -->|No| Score["Score answer"]
+        Score --> Correct{"Was the answer correct?"}
+        
+        Correct -->|No| AppendIncorrect["Append Incorrect ChatMessage to TaskState messages"]
+        AppendIncorrect --> LimitReached
+        
+        LimitReached -->|No| Generate
+    end
+    
+    MaxAttempts -->|Yes| Exit["Exit loop"]
+    Correct -->|Yes| Exit
+    LimitReached -->|Yes| Exit
+
+    classDef condition fill:#be133a,stroke:#8e0e2b
+    class MaxAttempts,Correct,LimitReached,Exit condition
+```
 
 Reasons why you may not be able to leverage the basic agent include (though these are typically out of scope for the MVP):
 
