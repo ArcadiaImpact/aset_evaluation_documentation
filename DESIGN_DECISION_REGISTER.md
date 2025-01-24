@@ -215,9 +215,11 @@ def scorer():
 
 `Metric` 's are typically calculated by aggregating `Score` values across multiple `Sample` 's into statistical measures, such as accuracy, mean, standard error, and other quantitative indicators of model performance. This can seem confusing or arbitrary when you only have one `Sample`. However, even if your dataset consists of only a single `Sample`, there is still benefit to defining metrics as these display in the top right corner of Inspect View and give richer context for your evaluation
 
-* **Inspect View Example**
+**Inspect View Example**
 
-    ![](https://t9011772876.p.clickup-attachments.com/t9011772876/0aba2379-01c9-4a41-afb0-f9d4d8f69b87/image.png)
+<div align="center">
+  <img src="https://t9011772876.p.clickup-attachments.com/t9011772876/0aba2379-01c9-4a41-afb0-f9d4d8f69b87/image.png" width="700" height="auto">
+</div>
 
 For displaying metrics when you only have one `Sample`, you should calculate any metrics inside the `scorer` and then retrieve the metrics inside `@metric` decorated functions in one of two ways:
 
