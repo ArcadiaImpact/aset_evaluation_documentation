@@ -16,7 +16,7 @@
 >*   **Solver:** [documentation](https://inspect.ai-safety-institute.org.uk/solvers.html) | [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/solver/_solver.py)
 >*   **Basic Agent:** [documentation](https://inspect.ai-safety-institute.org.uk/agents.html) | [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/solver/_basic_agent.py)
 >*   **Scorer:** [documentation](https://inspect.ai-safety-institute.org.uk/scorers.html) | [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/scorer/_scorer.py)
->    *   **Score:** [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/scorer/_metric.py)
+>   *   **Score:** [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/scorer/_metric.py)
 >    *   **Metric:** [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/scorer/_metric.py) | [documentation](https://inspect.ai-safety-institute.org.uk/scorers.html#scoring-metrics)
 
 
@@ -44,7 +44,7 @@ There are a few tricks/hacks when it comes to using the basic agent that may be 
 * The basic agent loop flow chart:
 
   ```mermaid
-    flowchart LR
+    flowchart TD
         subgraph Loop["Basic Agent Loop"]
             direction LR
             Generate["Generate"] --> ModelTool
