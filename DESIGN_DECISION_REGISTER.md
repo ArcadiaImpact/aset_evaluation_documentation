@@ -7,7 +7,8 @@
 
 
 
-> [!NOTE] **Below are some of the key classes and functions that you will need to understand in order to build an evaluation in Inspect. The accompanying code and documentation (if defined) is hyperlinked for each component.**
+> [!NOTE] 
+> **Below are some of the key classes and functions that you will need to understand in order to build an evaluation in Inspect. The accompanying code and documentation (if defined) is hyperlinked for each component.**
 >*   **Task:** [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/_eval/task/task.py)
 >*   **TaskState:** [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/solver/_task_state.py)
 >*   **Dataset/Sample**: [documentation](https://inspect.ai-safety-institute.org.uk/datasets.html) | [code](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/dataset/_dataset.py)
@@ -40,51 +41,37 @@ There are a few tricks/hacks when it comes to using the basic agent that may be 
 
 * The basic agent [documentation](https://inspect.ai-safety-institute.org.uk/agents.html#sec-basic-agent).
 * The `basic_agent()` code [implementation](https://github.com/UKGovernmentBEIS/inspect_ai/blob/main/src/inspect_ai/solver/_basic_agent.py).
-* The basic agent flow chart:
+* The basic agent loop flow chart:
 
   ```mermaid
-  %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
-  flowchart TD
+    flowchart LR
+        subgraph Loop["Basic Agent Loop"]
+            direction LR
+            Generate["Generate"] --> ModelTool
+            ModelTool{"Tool<br>called?"}
+            ModelTool -->|Yes| SubmitTool{"Submit tool<br>called?"}
+            ModelTool -->|No| AppendContinue["Append continue<br>message"]
+            
+            AppendContinue --> LimitCheck
+            SubmitTool -->|No| LimitCheck{"Limit<br>reached?"}
+            SubmitTool -->|Yes| MaxAttempts{"Max<br>attempts?"}
+            
+            MaxAttempts -->|No| Score["Score<br>answer"]
+            Score --> Correct{"Agent answer<br>correct?"}
+            
+            Correct -->|No| AppendIncorrect["Append incorrect<br>message"]
+            AppendIncorrect --> LimitCheck
+            
+            LimitCheck -->|No| Generate
+        end
+        
+        Start["Initialise system message, available tools, chat message/token limits, and max attempts"] --> Generate
+        MaxAttempts -->|Yes| Exit["Exit"]
+        Correct -->|Yes| Exit
+        LimitCheck -->|Yes| Exit
 
-    init("Initialize system message, available tools, chat message/token limits, and max attempts")
-    gen("Generate")
-    tool?@{shape: diamond, label: "Has the model called a tool?"}
-    submit?@{shape: diamond, label: "Was the submit tool called?"}
-    continue("Append continue ChatMessage to TaskState messages")
-    max_attempts?@{shape: diamond, label: "Has max attempts been reached?"}
-    score("Score answer")
-    correct?@{shape: diamond, label: "Was the answer correct?"}
-    incorrect("Append incorrect ChatMessage to TaskState messages")
-    limit?@{shape: diamond, label: "Has a limit been reached?"}
-    exit("Exit loop");
-
-    classDef terminal fill:#FF9999;
-    class max_attempts? terminal;
-    class correct? terminal;
-    class limit? terminal;
-    class exit terminal;
-
-    init --> gen
-
-    subgraph loop["Basic agent loop"]
-    gen --> tool?
-    tool? -->|Yes| submit?
-    tool? -->|No| continue
-    continue --> limit?
-    submit? -->|Yes| max_attempts?
-    submit? -->|No| limit?
-    max_attempts? -->|No| score
-
-    score --> correct?
-    correct? -->|No| incorrect
-    incorrect --> limit?
-    limit? -->|No| gen
-
-    end
-
-    max_attempts? -->|Yes| exit
-    correct? -->|Yes| exit
-    limit? -->|Yes| exit
+        classDef condition fill:#be133a,stroke:#8e0e2b
+        class MaxAttempts,Correct,LimitCheck,Exit condition
   ```
 
 Reasons why you may not be able to leverage the basic agent include (though these are typically out of scope):
