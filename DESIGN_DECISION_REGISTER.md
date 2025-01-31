@@ -270,6 +270,12 @@ def test_task_has_only_one_sample():
     assert len(my_task().samples) == 1
 ```
 
+## What scores should I report for a "baseline improvement" evaluation?
+
+What does this mean? Eval is trying to get the agent to generate a better score than some baseline.
+
+Report absolute score, relative score, and a binary score (improved?).
+
 # Sandbox
 
 ## How should I configure my environment variables?
