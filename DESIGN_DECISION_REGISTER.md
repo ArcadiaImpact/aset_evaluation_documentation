@@ -1,6 +1,7 @@
 # Design Decision Register
 
 > **_Intended audience:_** _Engineers, TPMs, Head of Engineering_
+> 
 > **_Purpose:_** _A live document which collates design decisions & analysis for sharing across projects_
 
 ## Resources
@@ -268,6 +269,20 @@ For these metrics to make sense, your dataset must have only one sample. Thus, i
 def test_task_has_only_one_sample():
     assert len(my_task().samples) == 1
 ```
+
+## What scores should I report for a "baseline improvement" evaluation?
+
+For some evaluations, we have some baseline performance on a task, and we're asking an agent to improve this performance. An example would be "elicitation" evaluations: given some benchmark, and the score obtained using basic scaffolding, can the agent modify the scaffolding so that a "child model" using that scaffolding gets a better score?
+
+If your evaluation fits this description, you should report 3 scores:
+
+* An absolute score, which represents the task performance after the agent made its modifications;
+* A relative score, calculated by normalizing the absolute score by the baseline;
+* A binary uplift score, calculated by applying a threshold to the relative score.
+
+For advice on choosing a suitable threshold, refer to [scoring guidelines](#how-do-i-turn-my-continuous-score-into-a-binary-passfail-metric).
+
+These three scores can be reported by using [dict-valued Score objects](https://inspect.ai-safety-institute.org.uk/scorers.html#value).
 
 # Sandbox
 
