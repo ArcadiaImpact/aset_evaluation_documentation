@@ -272,9 +272,17 @@ def test_task_has_only_one_sample():
 
 ## What scores should I report for a "baseline improvement" evaluation?
 
-What does this mean? Eval is trying to get the agent to generate a better score than some baseline.
+For some evaluations, we have some baseline performance on a task, and we're asking an agent to improve this performance. An example would be "elicitation" evaluations: given some benchmark, and the score obtained using basic scaffolding, can the agent modify the scaffolding so that a "child model" using that scaffolding gets a better score?
 
-Report absolute score, relative score, and a binary score (improved?).
+If your evaluation fits this description, you should report 3 scores:
+
+* An absolute score, which represents the task performance after the agent made its modifications;
+* A relative score, calculated by normalizing the absolute score by the baseline;
+* A binary uplift score, calculated by applying a threshold to the relative score.
+
+For advice on choosing a suitable threshold, refer to [scoring guidelines](#how-do-i-turn-my-continuous-score-into-a-binary-passfail-metric).
+
+These three scores can be reported by using [dict-valued Score objects](https://inspect.ai-safety-institute.org.uk/scorers.html#value).
 
 # Sandbox
 
